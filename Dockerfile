@@ -11,7 +11,7 @@ ARG OPENCV_VERSION=4.4.0
 
 RUN apk add --update --no-cache \
     # Build dependencies
-    build-base gcc g++ cmake pkgconf wget openblas openblas-dev \
+    build-base cmake pkgconf wget openblas openblas-dev \
     linux-headers \
     # Image IO packages
     libjpeg-turbo libjpeg-turbo-dev \
@@ -44,6 +44,7 @@ RUN apk add --update --no-cache \
     ln -vfs /usr/include/locale.h /usr/include/xlocale.h && \
     pip3 install -v --no-cache-dir --upgrade pip && \
     pip3 install -v --no-cache-dir numpy && \
+    rm -rf get-pip.py ~/.cache/pip && \
     # Download OpenCV source
     cd /tmp && \
     wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz && \
