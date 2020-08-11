@@ -1,4 +1,4 @@
-# OpenCV 4.2.0 with Python3.8 and video support
+# OpenCV 4.4.0 with Python3.8 and video support
 
 [![](https://img.shields.io/docker/build/czentye/opencv-video-minimal.svg?style=popout)](https://hub.docker.com/r/czentye/opencv-video-minimal)
 [![](https://img.shields.io/docker/pulls/czentye/opencv-video-minimal.svg?style=popout)](https://hub.docker.com/r/czentye/opencv-video-minimal)
@@ -42,7 +42,7 @@ The OpenCV compiled from source with the following configurations:
 -- 
 --   C/C++:
 --     Built as dynamic libs?:      YES
---     C++ Compiler:                /usr/bin/clang++  (ver 9.0.0)
+--     C++ Compiler:                /usr/bin/c++  (ver 9.0.0)
 --     Linker flags (Release):      -Wl,--gc-sections
 --     Linker flags (Debug):        -Wl,--gc-sections
 --     ccache:                      NO
@@ -115,7 +115,7 @@ The OpenCV compiled from source with the following configurations:
 
 ### Download
 
-To get the image use ``sudo docker pull czentye/opencv-video-minimal``
+To get the image use ``sudo docker pull brunosilva98/opencv-video-minimal``
 
 ### Run
 

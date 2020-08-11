@@ -7,11 +7,11 @@ MAINTAINER Janos Czentye <czentye@tmit.bme.hu>
 
 ENV LANG=C.UTF-8
 
-ARG OPENCV_VERSION=4.2.0
+ARG OPENCV_VERSION=4.4.0
 
 RUN apk add --update --no-cache \
     # Build dependencies
-    build-base clang clang-dev cmake pkgconf wget openblas openblas-dev \
+    build-base gcc g++ cmake pkgconf wget openblas openblas-dev \
     linux-headers \
     # Image IO packages
     libjpeg-turbo libjpeg-turbo-dev \
@@ -35,9 +35,10 @@ RUN apk add --update --no-cache \
     #        --update --no-cache py-numpy py-numpy-dev && \
     # Update also musl to avoid an Alpine bug
     apk upgrade --repository http://dl-cdn.alpinelinux.org/alpine/edge/main musl && \
+    wget https://bootstrap.pypa.io/get-pip.py && \
+    python3 get-pip.py && \
     # Make Python3 as default
     ln -vfs /usr/bin/python3 /usr/local/bin/python && \
-    ln -vfs /usr/bin/pip3 /usr/local/bin/pip && \
     # Fix libpng path
     ln -vfs /usr/include/libpng16 /usr/include/libpng && \
     ln -vfs /usr/include/locale.h /usr/include/xlocale.h && \
@@ -52,10 +53,7 @@ RUN apk add --update --no-cache \
     mkdir -vp /tmp/opencv-$OPENCV_VERSION/build && \
     cd /tmp/opencv-$OPENCV_VERSION/build && \
     cmake \
-        # Compiler params
         -D CMAKE_BUILD_TYPE=RELEASE \
-        -D CMAKE_C_COMPILER=/usr/bin/clang \
-        -D CMAKE_CXX_COMPILER=/usr/bin/clang++ \
         -D CMAKE_INSTALL_PREFIX=/usr \
         # No examples
         -D INSTALL_PYTHON_EXAMPLES=NO \
@@ -87,7 +85,7 @@ RUN apk add --update --no-cache \
     make install && \
     # Cleanup
     cd / && rm -vrf /tmp/opencv-$OPENCV_VERSION && \
-    apk del --purge build-base clang clang-dev cmake pkgconf wget openblas-dev \
+    apk del --purge build-base  cmake pkgconf wget openblas-dev \
                     openexr-dev gstreamer-dev gst-plugins-base-dev libgphoto2-dev \
                     libtbb-dev libjpeg-turbo-dev libpng-dev tiff-dev jasper-dev \
                     ffmpeg-dev libavc1394-dev python3-dev && \
