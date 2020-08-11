@@ -115,10 +115,6 @@ The OpenCV compiled from source with the following configurations:
 
 To get the image use ``sudo docker pull brunosilva98/opencv-video-minimal``
 
-### Run
-
-To run Python with Matplotlib use the following command ``sudo docker run -ti czentye/opencv-video-minimal python``
-
 ### License
 
 Licensed under MIT license, see LICENSE file.
