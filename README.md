@@ -6,8 +6,6 @@
 
 János Czentye, HSNLab@BME
 
-2019 December
-
 ### Description
 
 This repository provides a Dockerfile for building an image for the latest 
