@@ -1,9 +1,9 @@
 ################################################################################
 ##  Dockerfile to build minimal OpenCV img with Python3.7 and Video support   ##
 ################################################################################
-FROM alpine:3.10
+FROM alpine:3.11
 ENV LANG=C.UTF-8
-ARG OPENCV_VERSION=4.4.0
+ARG OPENCV_VERSION=4.5.1
 RUN apk add --update --no-cache \
         # Build dependencies
         build-base cmake pkgconf wget openblas openblas-dev \
@@ -13,7 +13,7 @@ RUN apk add --update --no-cache \
         libpng libpng-dev \
         libwebp libwebp-dev \
         tiff tiff-dev \
-        jasper-libs jasper-dev \
+        # jasper-libs jasper-dev \
         openexr openexr-dev \
         # Video depepndencies
         ffmpeg-libs ffmpeg-dev \
@@ -23,23 +23,11 @@ RUN apk add --update --no-cache \
         libgphoto2 libgphoto2-dev && \
         apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
         --update --no-cache libtbb libtbb-dev && \
-        # Python dependencies
-        apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-        --update --no-cache python3 python3-dev && \
-        #apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-        #        --update --no-cache py-numpy py-numpy-dev && \
         # Update also musl to avoid an Alpine bug
         apk upgrade --repository http://dl-cdn.alpinelinux.org/alpine/edge/main musl && \
-        wget https://bootstrap.pypa.io/get-pip.py && \
-        python3 get-pip.py && \
-        # Make Python3 as default
-        ln -vfs /usr/bin/python3 /usr/local/bin/python && \
         # Fix libpng path
         ln -vfs /usr/include/libpng16 /usr/include/libpng && \
         ln -vfs /usr/include/locale.h /usr/include/xlocale.h && \
-        pip3 install -v --no-cache-dir --upgrade pip && \
-        pip3 install -v --no-cache-dir numpy && \
-        rm -rf get-pip.py ~/.cache/pip && \
         # Download OpenCV source
         cd /tmp && \
         wget https://github.com/opencv/opencv/archive/$OPENCV_VERSION.tar.gz && \
@@ -50,7 +38,7 @@ RUN apk add --update --no-cache \
         cd /tmp/opencv-$OPENCV_VERSION/build && \
         cmake \
         -D CMAKE_BUILD_TYPE=RELEASE \
-        -D CMAKE_INSTALL_PREFIX=/usr \
+        -D CMAKE_INSTALL_PREFIX=/usr/local \
         # No examples
         -D INSTALL_PYTHON_EXAMPLES=NO \
         -D INSTALL_C_EXAMPLES=NO \
@@ -70,12 +58,7 @@ RUN apk add --update --no-cache \
         -D BUILD_EXAMPLES=NO \
         -D BUILD_opencv_java=NO \
         -D BUILD_opencv_python2=NO \
-        -D BUILD_ANDROID_EXAMPLES=NO \
-        # Build Python3 bindings only
-        -D PYTHON3_LIBRARY=`find /usr -name libpython3.so` \
-        -D PYTHON_EXECUTABLE=`which python3` \
-        -D PYTHON3_EXECUTABLE=`which python3` \
-        -D BUILD_opencv_python3=YES .. && \
+        -D BUILD_ANDROID_EXAMPLES=NO .. && \
         # Build
         make -j`grep -c '^processor' /proc/cpuinfo` && \
         make install && \
@@ -83,6 +66,6 @@ RUN apk add --update --no-cache \
         cd / && rm -vrf /tmp/opencv-$OPENCV_VERSION && \
         apk del --purge build-base  cmake pkgconf wget openblas-dev \
         openexr-dev gstreamer-dev gst-plugins-base-dev libgphoto2-dev \
-        libtbb-dev libjpeg-turbo-dev libpng-dev tiff-dev jasper-dev \
-        ffmpeg-dev libavc1394-dev python3-dev && \
+        libtbb-dev libjpeg-turbo-dev libpng-dev tiff-dev \
+        ffmpeg-dev libavc1394-dev && \
         rm -vrf /var/cache/apk/*
