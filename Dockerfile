@@ -24,10 +24,9 @@ RUN apk add --update --no-cache \
         apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
         --update --no-cache libtbb libtbb-dev && \
         # Python dependencies
-        apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-        --update --no-cache python3 python3-dev && \
-        #apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
-        #        --update --no-cache py-numpy py-numpy-dev && \
+        apk add --update --no-cache python3 python3-dev && \
+        # apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
+        # --update --no-cache python3 python3-dev && \
         # Update also musl to avoid an Alpine bug
         apk upgrade --repository http://dl-cdn.alpinelinux.org/alpine/edge/main musl && \
         wget https://bootstrap.pypa.io/get-pip.py && \
