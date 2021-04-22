@@ -1,7 +1,7 @@
 ################################################################################
 ##  Dockerfile to build minimal OpenCV img with Python3.7 and Video support   ##
 ################################################################################
-FROM alpine:3.11
+FROM alpine:3.13.5
 ENV LANG=C.UTF-8
 ARG OPENCV_VERSION=4.5.1
 RUN apk add --update --no-cache \
@@ -60,7 +60,7 @@ RUN apk add --update --no-cache \
         -D BUILD_opencv_python2=NO \
         -D BUILD_ANDROID_EXAMPLES=NO .. && \
         # Build
-        make -j`grep -c '^processor' /proc/cpuinfo` && \
+        make -j"$(nproc)" && \
         make install && \
         # Cleanup
         cd / && rm -vrf /tmp/opencv-$OPENCV_VERSION && \
