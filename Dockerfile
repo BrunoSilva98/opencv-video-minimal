@@ -1,7 +1,7 @@
 ################################################################################
 ##  Dockerfile to build minimal OpenCV img with Python3.7 and Video support   ##
 ################################################################################
-FROM alpine:3.10
+FROM alpine:3.13.5
 ENV LANG=C.UTF-8
 ARG OPENCV_VERSION=4.4.0
 RUN apk add --update --no-cache \
@@ -13,16 +13,15 @@ RUN apk add --update --no-cache \
         libpng libpng-dev \
         libwebp libwebp-dev \
         tiff tiff-dev \
-        jasper-libs jasper-dev \
         openexr openexr-dev \
         # Video depepndencies
         ffmpeg-libs ffmpeg-dev \
         libavc1394 libavc1394-dev \
         gstreamer gstreamer-dev \
-        gst-plugins-base gst-plugins-base-dev \
+        gst-plugins-base gst-plugins-base-dev gst-plugins-good \
         libgphoto2 libgphoto2-dev && \
         apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-        --update --no-cache libtbb libtbb-dev && \
+        --update --no-cache openmp openmp-dev && \
         # Python dependencies
         apk add --update --no-cache python3 python3-dev && \
         # apk add --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
@@ -58,7 +57,7 @@ RUN apk add --update --no-cache \
         -D WITH_1394=NO \
         -D WITH_LIBV4L=NO \
         -D WITH_V4l=YES \
-        -D WITH_TBB=YES \
+        -D WITH_OPENMP=YES \
         -D WITH_FFMPEG=YES \
         -D WITH_GPHOTO2=YES \
         -D WITH_GSTREAMER=YES \
@@ -82,6 +81,6 @@ RUN apk add --update --no-cache \
         cd / && rm -vrf /tmp/opencv-$OPENCV_VERSION && \
         apk del --purge build-base  cmake pkgconf wget openblas-dev \
         openexr-dev gstreamer-dev gst-plugins-base-dev libgphoto2-dev \
-        libtbb-dev libjpeg-turbo-dev libpng-dev tiff-dev jasper-dev \
+        openmp-dev libjpeg-turbo-dev libpng-dev tiff-dev \
         ffmpeg-dev libavc1394-dev python3-dev && \
         rm -vrf /var/cache/apk/*
